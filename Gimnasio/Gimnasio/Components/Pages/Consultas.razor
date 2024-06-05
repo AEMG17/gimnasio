@@ -1,0 +1,77 @@
+﻿@page "/consultas"
+@using Gimnasio.Models
+@using Gimnasio.Services
+@inject IConsulta iConsulta
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card m-5" style="width:90%;text-align:center">
+            <div class="card-header">
+                Nueva consulta
+            </div>
+            <div class="card-body">
+                <EditForm Model="consulta" OnValidSubmit="Registro">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-3">
+                        <select class="form-select" @bind="consulta.ClienteId">
+                            <option value="0" disabled="disabled">Selecciona al cliente</option>
+                            @foreach (var cliente in clientes)
+                            {
+                                <option value="@cliente.Id">@cliente.Nombre</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" @bind="consulta.Fecha" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" rows="4" @bind="consulta.Observaciones"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mt-5 pr-5">
+        <ConsultasHoy consultas="consultas" />
+    </div>
+</div>
+
+@code {
+
+    List<Cliente> clientes = new List<Cliente>();
+    Consulta consulta = new Consulta();
+    List<Consulta> consultas = new List<Consulta>();
+    TimeSpan? time = new TimeSpan(00, 00, 00);
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await iConsulta.Clientes();
+        consultas = await iConsulta.ConsultasHoy();
+    }
+
+    async void Registro()
+    {
+        consulta.Fecha = new DateTime(
+            consulta.Fecha.Value.Year,
+            consulta.Fecha.Value.Month,
+            consulta.Fecha.Value.Day,
+            time.Value.Hours,
+            time.Value.Minutes,
+            time.Value.Seconds);
+        var respuesta = await iConsulta.AgendarConsulta(consulta);
+        consultas = await iConsulta.ConsultasHoy();
+        StateHasChanged();
+    }
+}
+}
+
+

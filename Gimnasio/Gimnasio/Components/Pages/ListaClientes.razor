@@ -1,0 +1,38 @@
+﻿@using Gimnasio.Models
+@using Gimnasio.Services
+@using MudBlazor
+@rendermode InteractiveServer
+@inject ICliente clienteService
+
+<div class="card" style="width:75%;margin:auto">
+    <div class="card-header">
+        Clientes
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var cliente in clientes)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="nombre" class="form-label">Nombre completo:</label>
+                        <input type="text" class="form-control" id="nombre" value="@cliente.Nombre @cliente.PrimerApellido @cliente.SegundoApellido" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="observaciones" class="form-label">Tipo de Inscripción:</label>
+                        <input type="text" class="form-control" id="observaciones" value="@cliente.Observaciones" readonly>
+                    </div>
+                </div>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@code {
+    List<Cliente> clientes = new List<Cliente>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await clienteService.ListarClientes();
+    }
+}

@@ -1,0 +1,75 @@
+﻿@page "/modificar/{id:int}"
+@using Gimnasio.Models
+@using Gimnasio.Services
+@inject IConsulta iConsulta
+@rendermode InteractiveServer
+@inject NavigationManager navigation
+@using MudBlazor
+
+
+<MudThemeProvider />
+
+<MudGrid>
+    <MudItem md="6">
+        <div class="card m-5" style="width:90%;text-align:center">
+            <div class="card-header">
+                Nueva consulta
+            </div>
+            <div class="card-body">
+                <EditForm Model="consulta" OnValidSubmit="Modificar">
+                    <select class="form-select mb-2" @bind="consulta.ClienteId">
+                        <option value="0" disabled="disabled">Selecciona al paciente</option>
+                        @foreach (var cliente in clientes)
+                        {
+                            <option value="@cliente.Id">@cliente.Nombre</option>
+                        }
+                    </select>
+                    <div class="mb-2">
+                        <MudDatePicker Label="Fecha" @bind-Date="consulta.Fecha" />
+                    </div>
+                    <div class="mb-2">
+                        <MudTimePicker Label="Hora" @bind-Time="time" />
+                    </div>
+                    <div class="mb-2">
+                        <textarea class="form-control" id="textAreaExample" rows="4" @bind="consulta.Observaciones"></textarea>
+                        <label class="form-label" for="textAreaExample">Observaciones</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </EditForm>
+            </div>
+        </div>
+    </MudItem>
+</MudGrid>
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    List<Cliente> clientes = new List<Cliente>();
+    Consulta consulta = new Consulta();
+    TimeSpan? time = new TimeSpan(00, 00, 00);
+
+    protected override async Task OnInitializedAsync()
+    { 
+        clientes = await iConsulta.Clientes();
+        consulta = await iConsulta.ObtenerConsulta(id);
+        time = new TimeSpan(consulta.Fecha.Value.Hour, 
+               consulta.Fecha.Value.Minute, consulta.Fecha.Value.Second);
+    }
+
+    async Task Modificar()
+    {
+        consulta.Fecha = new DateTime(
+            consulta.Fecha.Value.Year,
+            consulta.Fecha.Value.Month,
+            consulta.Fecha.Value.Day,
+            time.Value.Hours,
+            time.Value.Minutes,
+            time.Value.Seconds);
+
+        await iConsulta.ModificarConsulta(consulta);
+        navigation.NavigateTo("/");
+    }
+}

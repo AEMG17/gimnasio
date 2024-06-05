@@ -1,0 +1,73 @@
+﻿@page "/clientes"
+@using Gimnasio.Components.Layout
+@using Gimnasio.Models
+@using Gimnasio.Services
+@rendermode InteractiveServer
+
+@inject ICliente clienteService
+
+@if (guardado)
+{
+    <Guardado />
+}
+
+@if(noGuardado)
+{
+    <NoGuardado />
+}
+
+<EditForm Model="cliente" OnValidSubmit="RegistrarClienteMethod">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="card" style="width:75%;margin:auto">
+        <div class="card-header">
+            Registrar cliente
+        </div>
+        <div class="card-body" style="text-align:center">
+            <div class="row" style="width:auto">
+                <div class="col-4" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Nombre (s)" @bind="cliente.Nombre" />
+                </div>
+                <div class="col-4" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Primer apellido" @bind="cliente.PrimerApellido" />
+                </div>
+                <div class="col-4" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Segundo apellido" @bind="cliente.SegundoApellido" />
+                </div>
+                <div class="col-4" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="C.U.R.P." @bind="cliente.CURP" maxlength="18" />
+                </div>
+                <div class="col-4" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Tipo Inscripcion" @bind="cliente.Observaciones" />
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<ListaClientes />
+
+@code {
+    Cliente cliente = new Cliente();
+    private bool guardado, noGuardado;
+
+    async void RegistrarClienteMethod()
+    {
+        var respuesta = await clienteService.RegistrarCliente(cliente);
+        if(respuesta.Id > 0)
+        {
+            noGuardado = false;
+            guardado = true;
+            StateHasChanged();
+        }
+        else
+        {
+            guardado = false;
+            noGuardado = true;
+            StateHasChanged();
+        }
+    }
+}

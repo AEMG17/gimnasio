@@ -1,0 +1,70 @@
+﻿@page "/suplementos"
+@using Gimnasio.Components.Layout
+@using Gimnasio.Models
+@using Gimnasio.Services
+@rendermode InteractiveServer
+
+@inject ISuplemento suplementoService
+
+@if (guardado)
+{
+    <Guardado />
+}
+
+@if (noGuardado)
+{
+    <NoGuardado />
+}
+
+<EditForm Model="suplemento" OnValidSubmit="RegistrarSuplementoMethod">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="card" style="width:75%;margin:auto">
+        <div class="card-header">
+            Registrar suplemento
+        </div>
+        <div class="card-body" style="text-align:center">
+            <div class="row" style="width:auto">
+                <div class="col-6" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Nombre" @bind="suplemento.Nombre" />
+                </div>
+                <div class="col-6" style="margin-bottom:2em">
+                    <input type="number" class="form-control" placeholder="Precio (ej. 149.99)" step="0.01" @bind="suplemento.Precio" />
+                </div>
+                <div class="col-6" style="margin-bottom:2em">
+                    <input type="number" class="form-control" placeholder="Stock (ej. 10)" @bind="suplemento.Stock" />
+                </div>
+                <div class="col-6" style="margin-bottom:2em">
+                    <input type="text" class="form-control" placeholder="Categoría" @bind="suplemento.Categoria" />
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<InventarioSuplemento />
+
+@code {
+    Suplemento suplemento = new Suplemento();
+    private bool guardado, noGuardado;
+
+    async void RegistrarSuplementoMethod()
+    {
+        var respuesta = await suplementoService.RegistrarSuplemento(suplemento);
+        if (respuesta.Id > 0)
+        {
+            noGuardado = false;
+            guardado = true;
+            StateHasChanged();
+        }
+        else
+        {
+            guardado = false;
+            noGuardado = true;
+            StateHasChanged();
+        }
+    }
+}

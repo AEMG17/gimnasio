@@ -1,0 +1,66 @@
+﻿@using Gimnasio.Models
+@using Gimnasio.Services
+@inject IConsulta iConsulta
+@inject NavigationManager navigation
+@using MudBlazor
+
+@rendermode InteractiveServer
+
+@if(consultas != null && consultas.Count > 0)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Consultas agendadas</h5>
+            <ul class="list-group list-group-light">
+                @if (consultas != null && consultas.Count() > 0)
+                {
+                    @foreach (var consulta in consultas)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fw-bold">@consulta.Cliente.Nombre @consulta.Cliente.PrimerApellido @consulta.Cliente.SegundoApellido</div>
+                                <div class="fw-normal">@consulta.Fecha</div>
+                                <div class="fw-light fst-italic">@consulta.Observaciones </div>
+                            </div>
+                            @if (consulta.Fecha > DateTime.Now)
+                            {
+                                <span class="badge rounded-pill badge-success">Próxima</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill badge-danger">Vencida</span>
+                            }
+                            <div>
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => Borrar(consulta.Id)" aria-label="eliminar"></MudIconButton>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Info" OnClick="() => Modificar(consulta.Id)" aria-label="editar"></MudIconButton>
+                            </div>
+                        </li>
+                    }
+                }               
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <p>Loading ...</p>
+}
+
+
+@code {
+    [Parameter]
+    public List<Consulta> consultas { get; set; } = new List<Consulta>();
+
+    async void Borrar(int id)
+    {
+        await iConsulta.BorrarConsulta(id);
+        consultas = await iConsulta.ConsultasHoy();
+        StateHasChanged();
+    }
+
+    async void Modificar(int id)
+    {
+        navigation.NavigateTo($"/modificar/{id}");
+    }
+}
+

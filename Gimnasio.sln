@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gimnasio", "Gimnasio\Gimnasio\Gimnasio.csproj", "{259E37A4-81C1-4A7F-A2BF-372E82D08CC2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gimnasio.Client", "Gimnasio\Gimnasio.Client\Gimnasio.Client.csproj", "{0F505818-0E12-4624-96FC-351804BE5AB8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{259E37A4-81C1-4A7F-A2BF-372E82D08CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259E37A4-81C1-4A7F-A2BF-372E82D08CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259E37A4-81C1-4A7F-A2BF-372E82D08CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259E37A4-81C1-4A7F-A2BF-372E82D08CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F505818-0E12-4624-96FC-351804BE5AB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F505818-0E12-4624-96FC-351804BE5AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F505818-0E12-4624-96FC-351804BE5AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F505818-0E12-4624-96FC-351804BE5AB8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43F54958-3A62-4AB9-86BD-D01CD2040B7B}
+	EndGlobalSection
+EndGlobal

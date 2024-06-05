@@ -1,0 +1,44 @@
+﻿@using Gimnasio.Models
+@using Gimnasio.Services
+@rendermode InteractiveServer
+@using MudBlazor
+
+@inject ISuplemento suplementoService
+
+
+<div class="card" style="width:75%;margin:auto">
+    <div class="card-header">
+        Suplementos
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var suplemento in suplementos)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="nombre" class="form-label">Suplemento:</label>
+                        <input type="text" class="form-control" id="nombre" value="@suplemento.Nombre" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="stock" class="form-label">Stock:</label>
+                        <input type="text" class="form-control" id="stock" value="@suplemento.Stock" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="suplementos" class="form-label">Tipo de Suplemento:</label>
+                        <input type="text" class="form-control" id="suplementos" value="@suplemento.Categoria" readonly>
+                    </div>
+                </div>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@code {
+    List<Suplemento> suplementos = new List<Suplemento>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        suplementos = await suplementoService.ListarSuplementos();
+    }
+}
